@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { add } from "../../Redux/CartsSlice";
+import { useDispatch } from "react-redux";
 
 const Home = () => {
     const [products, setProducts] = useState([]);
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const productsData = async () => {
@@ -13,6 +16,10 @@ const Home = () => {
     }, []);
 
     // console.log(products);
+
+    const handleAdd = (product) => {
+        dispatch(add(product))
+    }
 
     return (
         <div className="max-w-screen-xl mx-auto mb-20 mt-10">
@@ -47,9 +54,10 @@ const Home = () => {
                                         ""
                                     )}
                                 </p>
-                                <div className="card-actions justify-end mt-4">
-                                    <button className="px-3 py-2 bg-green-500 text-white rounded-md">
-                                        Buy Now
+                                <p className="font-bold text-xl">${product?.price}</p>
+                                <div className="card-actions justify-end">
+                                    <button className="px-3 py-2 bg-green-500 text-white rounded-md" onClick={() => handleAdd(product)}>
+                                        Add to cart
                                     </button>
                                 </div>
                             </div>
