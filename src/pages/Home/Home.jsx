@@ -1,24 +1,34 @@
 import { useEffect, useState } from "react";
 import { add } from "../../Redux/CartsSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Status, fetchProducts } from "../../Redux/ProductSlice";
 
 const Home = () => {
-    const [products, setProducts] = useState([]);
+    // const [products, setProducts] = useState([]);
     const dispatch = useDispatch()
 
-    useEffect(() => {
-        const productsData = async () => {
-            const res = await fetch("https://fakestoreapi.com/products");
-            const data = await res.json();
-            setProducts(data);
-        };
-        productsData();
-    }, []);
+    const {data:products, status} = useSelector(state => state.product)
+
+    // useEffect(() => {
+    //     const productsData = async () => {
+    //         const res = await fetch("https://fakestoreapi.com/products");
+    //         const data = await res.json();
+    //         setProducts(data);
+    //     };
+    //     productsData();
+    // }, []);
 
     // console.log(products);
 
+    useEffect(() => {
+        dispatch(fetchProducts())
+    }, [dispatch])
+
     const handleAdd = (product) => {
         dispatch(add(product))
+    }
+    if(status === Status.loading){
+        return <div className="flex justify-center items-center h-screen"><span className="loading loading-spinner loading-lg"></span></div>
     }
 
     return (
